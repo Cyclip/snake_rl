@@ -1,3 +1,5 @@
+# User-controlled snake game
+
 import time
 import numpy as np
 import keyboard
@@ -35,7 +37,8 @@ while True:
             direction = new_direction
         now = time.time()
 
-    result = game.step(direction)
+    game.direction = direction
+    result, reward, score = game.play()
     # print(f"{game.headPos} {game.foodPos} {game.life} \n" + game.display())
     clear()
     print(game.display())

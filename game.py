@@ -39,6 +39,10 @@ class Game:
     DIRECTION_LEFT = np.array([-1, 0])
     DIRECTION_RIGHT = np.array([1, 0])
 
+    EAT_FOOD_REWARD = 10
+    OUT_OF_BOUNDS_PENALTY = 10
+    HIT_BODY_PENALTY = 10
+
     def __init__(self):
         self.headPos = np.array([GRID_SIZE / 2, GRID_SIZE / 2], dtype=int)
         self.bodyPos = []
@@ -46,11 +50,14 @@ class Game:
         self.life = 3
         self.direction = np.array([0, 1], dtype=int)
     
-    def step(self, direction):
-        """Step game"""
-        # Update direction
-        self.direction = direction
+    def play(self):
+        """Play game
+        Args:
+            direction (np.array): Direction to move in
+        Returns:
 
+        """
+        reward = 0
         # Update bodys
         self.__update_body()
 
@@ -59,19 +66,22 @@ class Game:
 
         # Return game over if head is out of bounds
         if self.headPos[0] < 0 or self.headPos[0] >= GRID_SIZE or self.headPos[1] < 0 or self.headPos[1] >= GRID_SIZE:
-            return EnvReturnCode.GAME_OVER
+            reward -= Game.OUT_OF_BOUNDS_PENALTY
+            return EnvReturnCode.GAME_OVER, self.life, reward
 
         # Check if head is in food cell
         if (self.headPos == self.foodPos).all():
             self.life += 1
+            reward += Game.EAT_FOOD_REWARD
             self.foodPos = self.__generate_food_pos()
         
         # Check if head is in body cell
         for bodyPos in self.bodyPos:
             if (bodyPos.pos == self.headPos).all():
-                return EnvReturnCode.GAME_OVER
+                reward -= Game.HIT_BODY_PENALTY
+                return EnvReturnCode.GAME_OVER, self.life, reward
         
-        return EnvReturnCode.SUCCESS
+        return EnvReturnCode.SUCCESS, self.life, reward
     
     def display(self):
         """Display game"""
