@@ -2,6 +2,10 @@ import numpy as np
 from game import Game, EnvReturnCode, GRID_SIZE
 
 class Environment(Game):
+    INPUT_SIZE = 9
+    OUTPUT_SIZE = 3
+
+
     def __init__(self):
         super().__init__()
         self.iteration = 0

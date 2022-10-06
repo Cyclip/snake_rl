@@ -39,9 +39,14 @@ while True:
 
     game.direction = direction
     result, reward, score = game.play()
+
+    if result == EnvReturnCode.GAME_OVER:
+        break
+
     # print(f"{game.headPos} {game.foodPos} {game.life} \n" + game.display())
+    display = game.display()
     clear()
-    print(game.display())
+    print(display)
     prev = now
 
     if result == EnvReturnCode.GAME_OVER:

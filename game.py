@@ -91,8 +91,10 @@ class Game:
         for bodyPos in self.bodyPos:
             grid[bodyPos.pos[0], bodyPos.pos[1]] = CellType.BODY
         
+        details = f"Life: {self.life}\tPos: {self.headPos}\t{self.headPos[1] < 0} or {self.headPos[1] >= GRID_SIZE}"
+
         grid_str = '\n'.join(["|" + ' '.join([self.__display_val(i) for i in row]) + "|" for row in grid])
-        return " " + "_" * (2*GRID_SIZE - 1) + "\n" + grid_str + "\n" + " " + "‾" * (2*GRID_SIZE - 1)
+        return details + "\n" + " " + "_" * (2*GRID_SIZE - 1) + "\n" + grid_str + "\n" + " " + "‾" * (2*GRID_SIZE - 1)
     
     def __display_val(self, val):
         if val == CellType.HEAD:
